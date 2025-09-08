@@ -54,27 +54,31 @@
         "   $CONT = @('<BCPreferences Version=\"2\" MinVersion=\"2\"><TBcPrefs><CheckForUpdatesDayAmt Value=\"0\"/></TBcPrefs></BCPreferences>')",
         "   Set-Content \"$dir\\$file\" $CONT -Encoding Ascii",
         "}",
-        "'BCColors.xml', 'BCCommands.xml', 'BCFileFormats.xml', 'BC5Key.txt' | ForEach-Object {",
-        "   if (!(Test-Path \"$persist_dir\\$_\")) {",
-        "      New-Item \"$dir\\$_\" -ItemType File | Out-Null",
-        "   }",
+        "Set-Content -Path \"$dir\\BC5Key.txt\" -Value ''",
+        "$files = $manifest.persist | Where-Object { $_ -match '\\.' }",
+        "$files | ForEach-Object {",
+        "    # If we have the file, rename, then copy from 'persist'",
+        "    if ((Test-Path \"$dir\\$_\") -and (Test-Path \"$persist_dir\\$_\")) {",
+        "       Move-Item \"$dir\\$_\" \"$dir\\$_.original\" -Force",
+        "    }",
+        "    Copy-Item \"$persist_dir\\$_\" \"$dir\\$_\" -Force -ErrorAction 'Ignore'",
         "}"
     ],
     "persist": [
         "Helpers",
         "Packers",
+        "BC5Key.txt",
         "BCColors.xml",
         "BCCommands.xml",
         "BCFileFormats.xml",
         "BCPreferences.xml",
         "BCState.xml",
-        "BC5Key.txt"
-    ],
+        "BCSessions.xml"
+     ],
     "pre_uninstall": [
-        "'BCColors.xml', 'BCCommands.xml', 'BCFileFormats.xml', 'BCPreferences.xml', 'BCState.xml', 'BC5Key.txt' | ForEach-Object {",
-        "   if (Test-Path \"$dir\\$_\") {",
-        "       Move-Item \"$dir\\$_\" \"$persist_dir\\$_\" -Force",
-        "   }",
+        "$files = $manifest.persist | Where-Object { $_ -match '\\.' }",
+        "$files | ForEach-Object {",
+        "   Copy-Item \"$dir\\$_\" \"$persist_dir\\$_\" -Force -ErrorAction 'Ignore'",
         "}"
     ],
     "checkver": {
