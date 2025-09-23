@@ -1,17 +1,21 @@
 {
-    "version": "2025.2.2-252.26199.168",
-    "description": "Cross-Platform IDE for Python by JetBrains (Community edition).",
+    "version": "2025.3-253.20558.58",
+    "description": "Cross-Platform IDE for Python by JetBrains.",
     "homepage": "https://www.jetbrains.com/pycharm/",
     "license": {
-        "identifier": "Apache-2.0",
-        "url": "https://sales.jetbrains.com/hc/en-gb/articles/115001015290-Where-can-I-find-the-EULA-End-User-License-Agreement-"
+        "identifier": "Proprietary",
+        "url": "https://www.jetbrains.com/store/license.html"
     },
-    "url": "https://download.jetbrains.com/python/pycharm-community-2025.2.2.win.zip",
-    "hash": "287f4fd687c4fda3caaf4ef66392c7fbd1d6a2eab5bbf1b1bb40ead936a4cd0f",
+    "url": "https://download.jetbrains.com/python/pycharm-professional-253.20558.58.exe#/dl.7z",
+    "hash": "a7c8c0d0e888380b223d7e476fdaf78fde2b1afe98cd43fa190ea9117b19f0ba",
     "extract_to": "IDE",
+    "pre_install": [
+        "Get-ChildItem \"$persist_dir\\IDE\\bin\\pycharm*.exe.vmoptions\" -ErrorAction SilentlyContinue | Copy-Item -Destination \"$dir\\IDE\\bin\"",
+        "Get-ChildItem \"$persist_dir\\IDE\\bin\\jetbrains_client64.exe.vmoptions\" -ErrorAction SilentlyContinue | Copy-Item -Destination \"$dir\\IDE\\bin\""
+    ],
     "installer": {
         "script": [
-            "& \"$bucketsdir\\extras\\scripts\\jetbrains\\portable.ps1\" $dir $persist_dir",
+            "& \"$bucketsdir\\extras\\scripts\\jetbrains\\portable.ps1\" \"$dir\" \"$persist_dir\"",
             "Remove-Item \"$dir\\IDE\\`$*\" -Force -Recurse",
             "Set-Content \"$dir\\run_pycharm.bat\" \"start `\"`\" `\"$dir\\IDE\\bin\\pycharm64.exe`\"\" -Encoding ascii | Out-Null"
         ]
@@ -26,18 +30,7 @@
             ],
             "shortcuts": [
                 [
-                    "run_pycharm.bat",
-                    "JetBrains\\PyCharm",
-                    "",
-                    "IDE\\bin\\pycharm64.exe"
-                ]
-            ]
-        },
-        "32bit": {
-            "bin": "IDE\\bin\\pycharm.exe",
-            "shortcuts": [
-                [
-                    "IDE\\bin\\pycharm.exe",
+                    "IDE\\bin\\pycharm64.exe",
                     "JetBrains\\PyCharm"
                 ]
             ]
@@ -45,17 +38,20 @@
     },
     "persist": [
         "IDE\\bin\\idea.properties",
-        "IDE\\bin\\pycharm.exe.vmoptions",
         "IDE\\bin\\pycharm64.exe.vmoptions",
         "profile"
     ],
+    "pre_uninstall": [
+        "Move-Item \"$dir\\IDE\\bin\\pycharm*.exe.vmoptions\" -Destination \"$persist_dir\\IDE\\bin\" -ErrorAction SilentlyContinue",
+        "Move-Item \"$dir\\IDE\\bin\\jetbrains_client64.exe.vmoptions\" -Destination \"$persist_dir\\IDE\\bin\" -ErrorAction SilentlyContinue"
+    ],
     "checkver": {
-        "url": "https://data.services.jetbrains.com/products/releases?code=PCC&latest=true&platform=zip&type=release",
+        "url": "https://data.services.jetbrains.com/products/releases?code=PCP&latest=true&platform=zip&type=eap",
         "regex": "version\":\"(?<ver>[\\d.]+)\".*\"build\":\"(?<build>[\\d.]+)\"",
         "replace": "${ver}-${build}"
     },
     "autoupdate": {
-        "url": "https://download.jetbrains.com/python/pycharm-community-$matchVer.win.zip",
+        "url": "https://download.jetbrains.com/python/pycharm-professional-$preReleaseVersion.win.zip",
         "hash": {
             "url": "$url.sha256"
         }
