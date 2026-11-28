@@ -1,5 +1,5 @@
 {
-    "version": "5.5.3",
+    "version": "5.7.0",
     "description": "Dolby Encoding Engine Wrapper",
     "homepage": "https://github.com/pcroland/deew",
     "license": "MIT",
@@ -8,8 +8,8 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/pcroland/deew/releases/download/5.5.3/deew.exe",
-            "hash": "5bacc9fc5f13a2e5de8ceaae8f73976b28e3d61eba8abc7aec77a6c60ba3e6cb"
+            "url": "https://github.com/pcroland/deew/releases/download/5.7.0/deew.exe",
+            "hash": "88c62ce049bb21f43653b1957389115190fccba00c5d15b00176d4306464f6c1"
         }
     },
     "post_install": [
